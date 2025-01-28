@@ -26,8 +26,8 @@ def apply_pymol_script(pdb_file):
     cmd.set("transparency", 0.25)
 
 # File and directory paths
-metadata_file = "metadata.csv"
-aligned_files_dir = "aligned_files"
+metadata_file = "../../metadata.csv"
+aligned_files_dir = "../../aligned_files"
 output_dir = "Renamed_pdbs"  # Output directory for renamed PDB files
 log_file = os.path.join(output_dir, "missing_files.log")  # Log file inside the output directory
 session_file = os.path.join(output_dir, "Pymol_session.pse")  # PyMOL session file in the output directory
