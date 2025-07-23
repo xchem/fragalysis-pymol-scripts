@@ -3,6 +3,7 @@ import shutil
 import csv
 from pymol import cmd
 
+
 def apply_pymol_script(pdb_file):
     """Applies the specified PyMOL commands to the given PDB file."""
     cmd.load(pdb_file)
@@ -25,12 +26,17 @@ def apply_pymol_script(pdb_file):
     cmd.set("surface_color", "white")
     cmd.set("transparency", 0.25)
 
+
 # File and directory paths
 metadata_file = "../../metadata.csv"
 aligned_files_dir = "../../aligned_files"
 output_dir = "Renamed_pdbs"  # Output directory for renamed PDB files
-log_file = os.path.join(output_dir, "missing_files.log")  # Log file inside the output directory
-session_file = os.path.join(output_dir, "Pymol_session.pse")  # PyMOL session file in the output directory
+log_file = os.path.join(
+    output_dir, "missing_files.log"
+)  # Log file inside the output directory
+session_file = os.path.join(
+    output_dir, "Pymol_session.pse"
+)  # PyMOL session file in the output directory
 
 # Ensure output directory exists
 os.makedirs(output_dir, exist_ok=True)
@@ -41,13 +47,15 @@ with open(log_file, "w") as log:
     log.write("===============================\n")
 
     # Read the metadata CSV
-    with open(metadata_file, newline='') as csvfile:
+    with open(metadata_file, newline="") as csvfile:
         reader = csv.DictReader(csvfile)
 
         # Ensure required columns exist
         fieldnames = reader.fieldnames
         if "Code" not in fieldnames or "Compound code" not in fieldnames:
-            raise ValueError("CSV file must contain 'Code' and 'Compound code' columns.")
+            raise ValueError(
+                "CSV file must contain 'Code' and 'Compound code' columns."
+            )
 
         # Start a new PyMOL session
         cmd.reinitialize()  # Reinitialize PyMOL to ensure a clean state
@@ -93,7 +101,9 @@ with open(log_file, "w") as log:
             if object_name not in cmd.get_names():
                 # Load the PDB file if it is not already in the session
                 cmd.load(output_pdb_file, object_name)
-                print(f"Loaded: {output_pdb_file} into session with object name: {object_name}")
+                print(
+                    f"Loaded: {output_pdb_file} into session with object name: {object_name}"
+                )
 
         # Save the PyMOL session
         try:
@@ -103,4 +113,6 @@ with open(log_file, "w") as log:
             log.write(f"Failed to save PyMOL session: {e}\n")
             print(f"Failed to save PyMOL session: {e}")
 
-    print(f"Process completed. Check the log and session files in the {output_dir} directory.")
+    print(
+        f"Process completed. Check the log and session files in the {output_dir} directory."
+    )
