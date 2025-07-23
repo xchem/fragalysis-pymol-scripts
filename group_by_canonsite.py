@@ -15,14 +15,28 @@ with open(METADATA_FILE, newline="") as csvfile:
         grouped.setdefault(group, set())
         grouped[group].add(observation)
 
-for canonsite, observations in grouped.items():
+colors = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta']
+
+colors = colors*(len(grouped)//len(colors)+1)
+
+for canonsite, color in zip(sorted(grouped), colors):
+    observations = grouped[canonsite]
+
+    group = canonsite.replace(" ", "").replace("/","_")
+
+    count = 0
+
     for observation in observations:
         file = ALIGNED_FILES_DIR / observation / f"{observation}.sdf"
 
         try:
             cmd.load(file, observation)
+            count += 1
         except CmdException:
             print("ERROR", file, "not found")
             continue
 
-        cmd.group(canonsite, observation)
+        cmd.group(group, observation)
+
+    if count:
+        cmd.color(color, f"{group} and elem C")
